@@ -1,11 +1,33 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView,TouchableOpacity} from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 
 
 
 // SCREEN 2 - ABOUT US
 
-export default function AboutUsScreen() {
+export default function AboutUsScreen({ navigation }: { navigation?: any }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const navigateTo = (screen: string) => {
+    setMenuOpen(false);
+    if (navigation && typeof navigation.navigate === 'function') {
+      navigation.navigate(screen);
+    }
+  };
+
+  const navigationItems = [
+    ['Home', 'Home'],
+    ['About Us', 'AboutUS'],
+    ['Overview', 'Overview'],
+    ['Booking Prices', 'BookingPrices'],
+    ['Payment', 'Payment'],
+    ['Contact Us', 'ContactUS'],
+    ['FAQ', 'FAQ'],
+    ['Calculate Fees', 'CalculateFees'],
+    ['Sign Up', 'Signup'],
+    ['Plans', 'Plans'],
+    ['Venues', 'Venues'],
+  ] as const;
 
   return (
 
@@ -24,13 +46,34 @@ export default function AboutUsScreen() {
 
         {/* Menu button */}
 
-        <TouchableOpacity>
+        <TouchableOpacity
+          accessibilityRole="button"
+          accessibilityLabel={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          onPress={() => setMenuOpen(!menuOpen)}
+          style={styles.menuButton}
+        >
           <Text style={styles.menu}>
-            ☰
+            {menuOpen ? '×' : '☰'}
           </Text>
         </TouchableOpacity>
 
       </View>
+
+      {menuOpen && (
+        <View style={styles.navigationMenu}>
+          {navigationItems.map(([label, screen]) => (
+            <TouchableOpacity
+              key={screen}
+              style={styles.navigationItem}
+              accessibilityRole="button"
+              accessibilityLabel={`Navigate to ${label}`}
+              onPress={() => navigateTo(screen)}
+            >
+              <Text style={styles.navigationText}>{label}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
 
 
       {/* Pink line */}
@@ -106,10 +149,10 @@ export default function AboutUsScreen() {
 
       {/* Gaming image */}
 
-     //<Image
-       // source={require('./assets/console_bay.jpg')}
-        //style={styles.consoleImage}
-      /> 
+      {/* <Image
+        source={require('./assets/console_bay.jpg')}
+        style={styles.consoleImage}
+      /> */}
 
     </ScrollView>
   );
@@ -150,6 +193,28 @@ const styles = StyleSheet.create({
   menu: {
     color: '#FFFFFF',
     fontSize: 24,
+  },
+
+  menuButton: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+
+  navigationMenu: {
+    backgroundColor: '#151329',
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+  },
+
+  navigationItem: {
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#29243D',
+  },
+
+  navigationText: {
+    color: '#FFFFFF',
+    fontSize: 14,
   },
 
 

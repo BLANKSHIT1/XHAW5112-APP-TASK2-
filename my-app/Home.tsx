@@ -1,10 +1,44 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View,   Image, ScrollView,TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { useRef, useState } from 'react';
 
-export default function App() {
+export default function App({ navigation }: { navigation?: any }) {
+  const scrollRef = useRef<ScrollView>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [sectionPositions, setSectionPositions] = useState<Record<string, number>>({});
+
+  const navigationItems = [
+    ['Home', 'home'],
+    ['About Us', 'AboutUS'],
+    ['Overview', 'Overview'],
+    ['Booking Prices', 'BookingPrices'],
+    ['Payment', 'Payment'],
+    ['Contact Us', 'ContactUS'],
+    ['FAQ', 'FAQ'],
+    ['Calculate Fees', 'CalculateFees'],
+    ['Sign Up', 'Signup'],
+    ['Plans', 'Plans'],
+    ['Venues', 'Venues'],
+  ] as const;
+
+  const navigateTo = (destination: string) => {
+    setMenuOpen(false);
+
+    if (destination === 'home') {
+      scrollRef.current?.scrollTo({
+        y: sectionPositions.home ?? 0,
+        animated: true,
+      });
+      return;
+    }
+
+    navigation?.navigate(destination);
+  };
+
   return (
      // Allows the page to scroll up and down
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+    <ScrollView ref={scrollRef} style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <StatusBar style="light" />
 
       {/* TOP NAVIGATION BAR*/}
 
@@ -19,13 +53,32 @@ export default function App() {
 
         {/* Menu button */}
 
-        <TouchableOpacity>
-          <Text style={styles.menu}>
-            ☰
-          </Text>
+        <TouchableOpacity
+          accessibilityRole="button"
+          accessibilityLabel={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          onPress={() => setMenuOpen(!menuOpen)}
+          style={styles.menuButton}
+        >
+          <Text style={styles.menu}>{menuOpen ? '×' : '☰'}</Text>
         </TouchableOpacity>
 
       </View>
+
+      {menuOpen && (
+        <View style={styles.navigationMenu}>
+          {navigationItems.map(([label, destination]) => (
+            <TouchableOpacity
+              key={destination}
+              onPress={() => navigateTo(destination)}
+              style={styles.navigationItem}
+              accessibilityRole="button"
+              accessibilityLabel={`Navigate to ${label}`}
+            >
+              <Text style={styles.navigationText}>{label}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
 
 
       {/* Pink line below navigation */}
@@ -42,6 +95,10 @@ export default function App() {
 
 
       {/*UNLEASH THE SQUAD*/}
+      <View onLayout={(event) => {
+        const y = event.nativeEvent.layout.y;
+        setSectionPositions((positions) => ({ ...positions, home: y }));
+      }}>
       <Text style={styles.mainTitle}>
         UNLEASH THE SQUAD
       </Text>
@@ -53,6 +110,7 @@ export default function App() {
         high-tech birthday packages. Experience low
         latency and pro-grade peripherals.
       </Text>
+      </View>
 
 
       {/*SEPARATOR */}
@@ -62,6 +120,10 @@ export default function App() {
 
       {/* OPERATORS ON DUTY */}
 
+      <View onLayout={(event) => {
+        const y = event.nativeEvent.layout.y;
+        setSectionPositions((positions) => ({ ...positions, operators: y }));
+      }}>
       <Text style={styles.sectionTitle}>
         OPERATORS ON DUTY
       </Text>
@@ -134,10 +196,15 @@ export default function App() {
 
       </View>
 
+      </View>
+
 
       {/*ESPORTS & TOURNEYS*/}
 
-      <View style={styles.tourneyBox}>
+      <View style={styles.tourneyBox} onLayout={(event) => {
+        const y = event.nativeEvent.layout.y;
+        setSectionPositions((positions) => ({ ...positions, tournaments: y }));
+      }}>
 
         <Text style={styles.tourneyTitle}>
           ESPORTS & TOURNEYS
@@ -161,15 +228,15 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#121225',
   },
   contentContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: 'stretch',
   },
 
    // HEADER
   header: {
+    backgroundColor: '#111126',
     height: 55,
     flexDirection: 'row',
     alignItems: 'center',
@@ -191,6 +258,24 @@ const styles = StyleSheet.create({
   menu: {
     color: '#FFFFFF',
     fontSize: 24,
+  },
+  menuButton: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  navigationMenu: {
+    backgroundColor: '#151329',
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+  },
+  navigationItem: {
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#29243d',
+  },
+  navigationText: {
+    color: '#FFFFFF',
+    fontSize: 14,
   },
 
 
