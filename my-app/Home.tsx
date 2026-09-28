@@ -4,7 +4,7 @@ import { StyleSheet, Text, View,   Image, ScrollView,TouchableOpacity} from 'rea
 export default function App() {
   return (
      // Allows the page to scroll up and down
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
 
       {/* TOP NAVIGATION BAR*/}
 
@@ -33,12 +33,12 @@ export default function App() {
       <View style={styles.pinkLine} />
 
 
-      {/* MAIN IMAGE*/}
+      {/* MAIN IMAGE
 
-      <Image
-        source={require('./assets/esports_arena.jpg')}
-        style={styles.mainImage}
-      />
+      //<Image
+        //source={require('./assets/esports_arena.jpg')}
+        //style={styles.mainImage}
+      /> */}
 
 
       {/*UNLEASH THE SQUAD*/}
@@ -162,6 +162,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  contentContainer: {
     alignItems: 'center',
     justifyContent: 'center',
   },
