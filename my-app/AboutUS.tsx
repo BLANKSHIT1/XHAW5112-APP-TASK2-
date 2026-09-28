@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   // Main screen
   container: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: '#121225',
   },
 
 
