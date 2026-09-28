@@ -43,7 +43,7 @@ export default function MenuScreen({ navigation }) {
 
       <TouchableOpacity
         style={styles.menuItem}
-        onPress={() => navigation.navigate('AboutUs')}
+        onPress={() => navigation.navigate('AboutUS')}
       >
         <Text style={styles.menuText}>
           02  ABOUT US
@@ -83,7 +83,7 @@ export default function MenuScreen({ navigation }) {
 
       <TouchableOpacity
         style={styles.menuItem}
-        onPress={() => navigation.navigate('ContactUs')}
+        onPress={() => navigation.navigate('ContactUS')}
       >
         <Text style={styles.menuText}>
           06  CONTACT US
@@ -113,7 +113,7 @@ export default function MenuScreen({ navigation }) {
 
       <TouchableOpacity
         style={styles.menuItem}
-        onPress={() => navigation.navigate('SignUp')}
+        onPress={() => navigation.navigate('Signup')}
       >
         <Text style={styles.menuText}>
           09  SIGN UP
